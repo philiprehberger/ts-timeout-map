@@ -1,0 +1,57 @@
+{
+  "name": "@philiprehberger/timeout-map",
+  "version": "0.1.0",
+  "description": "Map with automatic entry expiration — TTL per key",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "map",
+    "timeout",
+    "ttl",
+    "expiry",
+    "cache",
+    "session"
+  ],
+  "author": "philiprehberger",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/philiprehberger/ts-timeout-map.git"
+  },
+  "bugs": {
+    "url": "https://github.com/philiprehberger/ts-timeout-map/issues"
+  },
+  "homepage": "https://github.com/philiprehberger/ts-timeout-map#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}
