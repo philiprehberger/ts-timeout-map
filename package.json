@@ -1,6 +1,6 @@
 {
   "name": "@philiprehberger/timeout-map",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Map with automatic entry expiration — TTL per key",
   "type": "module",
   "main": "./dist/index.cjs",
