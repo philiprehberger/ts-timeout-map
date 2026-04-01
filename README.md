@@ -14,6 +14,8 @@ npm install @philiprehberger/timeout-map
 
 ## Usage
 
+### Basic Usage
+
 ```ts
 import { TimeoutMap } from '@philiprehberger/timeout-map';
 
@@ -41,6 +43,78 @@ for (const [key, value] of map) {
 }
 ```
 
+### Sliding Window TTL
+
+Extend an entry's TTL each time it is accessed via `get()` or `has()`:
+
+```ts
+const sessions = new TimeoutMap<string, object>({
+  defaultTtl: 15 * 60_000, // 15 minutes
+  slidingExpiration: true,
+});
+
+sessions.set('user:1', { role: 'admin' });
+
+// Each access resets the 15-minute timer
+sessions.get('user:1'); // TTL reset to 15 minutes from now
+```
+
+### Max Size Limit
+
+Cap the number of entries and evict the oldest when the limit is exceeded:
+
+```ts
+const cache = new TimeoutMap<string, Buffer>({
+  maxSize: 1000,
+  onEvict: (key, value) => {
+    console.log(`Evicted: ${key}`);
+  },
+});
+
+// When the 1001st entry is added, the oldest entry is evicted
+cache.set('key-1001', data);
+```
+
+### Batch Operations
+
+Efficiently set, get, or delete multiple entries at once:
+
+```ts
+const map = new TimeoutMap<string, number>({ defaultTtl: 60_000 });
+
+// Set multiple entries (each tuple is [key, value, ttl?])
+map.setMany([
+  ['a', 1],
+  ['b', 2],
+  ['c', 3, 30_000], // per-key TTL override
+]);
+
+// Get multiple values (returns a Map, omits missing/expired)
+const results = map.getMany(['a', 'b', 'missing']);
+// Map { 'a' => 1, 'b' => 2 }
+
+// Delete multiple keys (returns count of deleted entries)
+const removed = map.deleteMany(['a', 'c']);
+// 2
+```
+
+### Periodic Background Cleanup
+
+Eagerly remove expired entries on a timer instead of waiting for lazy access:
+
+```ts
+const cache = new TimeoutMap<string, string>({
+  defaultTtl: 60_000,
+  onExpire: (key) => console.log(`Cleaned up: ${key}`),
+});
+
+// Run cleanup every 10 seconds
+cache.startCleanup(10_000);
+
+// Stop cleanup when no longer needed
+cache.stopCleanup();
+```
+
 ## API
 
 ### `new TimeoutMap<K, V>(options?)`
@@ -53,6 +127,9 @@ Creates a new timeout map.
 |--------|------|-------------|
 | `defaultTtl` | `number` | Default TTL in milliseconds for all entries |
 | `onExpire` | `(key, value) => void` | Callback fired when an entry expires |
+| `slidingExpiration` | `boolean` | Reset TTL on each `get()` / `has()` access (default `false`) |
+| `maxSize` | `number` | Maximum number of entries; oldest evicted when exceeded |
+| `onEvict` | `(key, value) => void` | Callback fired when an entry is evicted due to `maxSize` |
 
 ### Methods
 
@@ -62,6 +139,11 @@ Creates a new timeout map.
 - **`delete(key)`** -- Remove an entry
 - **`clear()`** -- Remove all entries
 - **`size`** -- Count of non-expired entries (triggers cleanup)
+- **`setMany(entries)`** -- Set multiple `[key, value, ttl?]` tuples at once
+- **`getMany(keys)`** -- Get multiple values; returns a `Map` (omits missing/expired)
+- **`deleteMany(keys)`** -- Delete multiple keys; returns count of entries removed
+- **`startCleanup(intervalMs)`** -- Start periodic background expiration sweep
+- **`stopCleanup()`** -- Stop the background cleanup timer
 - **`[Symbol.iterator]()`** -- Iterate over non-expired `[key, value]` pairs
 
 ## Development

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+- Add sliding window TTL that extends on access
+- Add max size limit with oldest-entry eviction
+- Add batch operations (setMany, getMany, deleteMany)
+- Add periodic background cleanup with configurable interval
+
 ## 0.1.2
 
 - Standardize README to 3-badge format with emoji Support section
