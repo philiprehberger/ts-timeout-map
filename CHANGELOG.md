@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0 (2026-04-27)
+- Add `getWithExpiry(key)` returning value + expiry metadata
+- Add `stats()` for hit/miss/expiration counters and `resetStats()`
+- Compliance: README one-liner cleaned up
+
 ## 0.2.0
 
 - Add sliding window TTL that extends on access

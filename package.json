@@ -1,6 +1,6 @@
 {
   "name": "@philiprehberger/timeout-map",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Map with automatic entry expiration — TTL per key",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -21,7 +21,6 @@
   "files": [
     "dist"
   ],
-  "sideEffects": false,
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -35,7 +34,8 @@
     "ttl",
     "expiry",
     "cache",
-    "session"
+    "session",
+    "stats"
   ],
   "author": "Philip Rehberger",
   "license": "MIT",
@@ -43,15 +43,16 @@
     "type": "git",
     "url": "git+https://github.com/philiprehberger/ts-timeout-map.git"
   },
+  "homepage": "https://github.com/philiprehberger/ts-timeout-map#readme",
   "bugs": {
     "url": "https://github.com/philiprehberger/ts-timeout-map/issues"
-  },
-  "homepage": "https://github.com/philiprehberger/ts-timeout-map#readme",
-  "engines": {
-    "node": ">=18.0.0"
   },
   "devDependencies": {
     "tsup": "^8.0.0",
     "typescript": "^6.0.2"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "sideEffects": false
 }
